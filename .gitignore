@@ -93,4 +93,10 @@ target/
 /models/
 
 # exclude data from source control by default
+<<<<<<< HEAD
 # /data/
+
+
+=======
+# /data/
+>>>>>>> parent of fb71cbe (Add meal planner agent with CLI)
