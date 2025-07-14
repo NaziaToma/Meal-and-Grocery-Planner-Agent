@@ -1,70 +1,132 @@
-## Adjusting .gitignore
+# Efficient Meal & Grocery Planner Agent
 
-Ensure you adjust the `.gitignore` file according to your project needs. For example, since this is a template, the `/data/` folder is commented out and data will not be exlucded from source control:
+---
 
-```plaintext
-# exclude data from source control by default
-# /data/
+## Motivation
+
+Meal planning can be overwhelming, especially when you’re trying to balance nutrition, taste, budget, and pantry leftovers. Most people spend too much time figuring out what to cook, often overspend on groceries, and still waste food. This project uses AI agents to automate meal planning and budget tracking, so you can focus on enjoying your meals, not planning them.
+
+---
+
+## Features
+
+- **Automated Meal Planning:** Generates efficient 7-day meal plans, with smart recipe repeats to minimize effort and reduce food waste.
+- **Real-Time Grocery Pricing:** Checks web-sourced grocery prices for each item on your list (configurable by store/location).
+- **Budget Awareness:** Revises the plan up to three times if it exceeds your set budget, ensuring affordability.
+- **Customizable Preferences:** Supports nutrition goals, dietary restrictions, cultural cuisines, pantry leftovers, and item limits.
+- **Agent-Based & Modular:** Clean, extensible agent/tool design—easy to add features or connect new data sources.
+- **Traceable & Debuggable:** Built-in tracing with [Judgeval](https://github.com/judgeval/judgeval) for seamless debugging and workflow insights.
+
+---
+
+## File Structure
+
 ```
-
-Typically, you want to exclude this folder if it contains either sensitive data that you do not want to add to version control or large files.
-
-## Duplicating the .env File
-
-To set up your environment variables, you need to duplicate the `.env.example` file and rename it to `.env`. You can do this manually or using the following terminal command:
-
-```bash
-cp .env.example .env # Linux, macOS, Git Bash, WSL
-copy .env.example .env # Windows Command Prompt
-```
-
-This command creates a copy of `.env.example` and names it `.env`, allowing you to configure your environment variables specific to your setup.
-
-## Project Organization
-
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── README.md          <- The top-level README for developers using this project
-├── data
-│   ├── external       <- Data from third party sources
-│   ├── interim        <- Intermediate data that has been transformed
-│   ├── processed      <- The final, canonical data sets for modeling
-│   └── raw            <- The original, immutable data dump
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-└── src                         <- Source code for this project
-    │
-    ├── __init__.py             <- Makes src a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    │
-    ├── modeling
-    │   ├── __init__.py
-    │   ├── predict.py          <- Code to run model inference with trained models
-    │   └── train.py            <- Code to train models
-    │
-    ├── plots.py                <- Code to create visualizations
-    │
-    └── services                <- Service classes to connect with external platforms, tools, or APIs
-        └── __init__.py
+Meal-and-Grocery-Planner-Agent/
+├── src/
+│   ├── modeling/
+│   ├── services/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── dataset.py
+│   ├── features.py
+│   ├── meal_planner.py    # Main CLI
+│   └── plots.py
+├── .env.example
+├── requirements.txt
+├── README.md
+└── ...
 ```
 
 ---
+
+## Setup
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone <repo-url>
+   cd Meal-and-Grocery-Planner-Agent
+   ```
+
+2. **Set up a virtual environment:**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate   # Windows: .venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure API keys:**
+
+   - Copy `.env.example` to `.env`.
+   - Fill in your `OPENAI_API_KEY` (get one [here](https://platform.openai.com/account/api-keys)).
+   - Add JUDGMENT_API_KEY, JUDGMENT_ORG_ID (create your account [here](https://app.judgmentlabs.ai/register))
+
+---
+
+## Usage
+
+Run the CLI meal planner:
+
+```bash
+python src/meal_planner.py
+```
+
+You’ll be prompted for:
+
+- Nutrition goals (e.g., high protein, low carb)
+- Cultural cuisine preferences (e.g., Mexican, Italian)
+- Dietary restrictions (e.g., vegetarian, gluten-free)
+- Pantry leftovers (comma-separated)
+- Grocery budget for the week
+- Maximum number of new grocery items (optional)
+
+The system will generate a complete meal plan and a priced grocery list, retrying with cheaper options if over budget.
+
+---
+
+## Example Output
+
+![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot01.png)
+![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot02.png)
+![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot03.png)
+![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot04.png)
+
+---
+
+## Tracing & Debugging with Judgeval
+
+This project uses [Judgeval](https://github.com/judgeval/judgeval) for **automatic tracing** of agent workflows.
+
+**How does it work?**
+
+- Key functions and agent/tool calls are instrumented with the `@judgment.observe` decorator from Judgeval.
+- Every time you run the CLI, a trace of the workflow (including agent reasoning, tool calls, and results) is recorded.
+- Tracing helps with debugging, understanding agent behavior, and performance optimization.
+
+To view or analyze traces, see the [Judgeval documentation](https://github.com/judgeval/judgeval) for dashboard or export options.
+
+---
+
+## Troubleshooting
+
+- **Missing API Key:**
+  Make sure you set `OPENAI_API_KEY` in your `.env` file.
+- **Dependencies not found:**
+  Double-check your virtual environment is active and all packages are installed.
+- **Web search or pricing issues:**
+  Ensure your internet connection is active and you have API quota remaining.
+- **Trace issues:**
+  If you don’t see traces, verify the Judgeval integration and check the documentation for advanced setup.
+
+---
+
+## License
+
+MIT License
