@@ -1,7 +1,5 @@
 # Efficient Meal & Grocery Planner Agent
 
----
-
 ## Motivation
 
 Meal planning can be overwhelming, especially when you’re trying to balance nutrition, taste, budget, and pantry leftovers. Most people spend too much time figuring out what to cook, often overspend on groceries, and still waste food. This project uses AI agents to automate meal planning and budget tracking, so you can focus on enjoying your meals, not planning them.
