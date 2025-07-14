@@ -91,10 +91,10 @@ The system will generate a complete meal plan and a priced grocery list, retryin
 
 ## Example Output
 
-![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot01.png)
-![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot02.png)
-![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot03.png)
-![Sample Output](D:\Coding\GitHub Repos\Meal-and-Grocery-Planner-Agent\assests\screenshots\Screenshot04.png)
+![Sample Output](assets/screenshots/Screenshot01.png)
+![Sample Output](assets/screenshots/Screenshot02.png)
+![Sample Output](assets/screenshots/Screenshot03.png)
+![Sample Output](assets/screenshots/Screenshot04.png)
 
 ---
 
