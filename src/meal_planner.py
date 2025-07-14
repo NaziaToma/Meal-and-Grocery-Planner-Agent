@@ -5,13 +5,18 @@ from dotenv import load_dotenv
 # Import custom agent modules (make sure these are installed and available)
 from agents import Agent, Runner, WebSearchTool, function_tool
 import logging
+from judgeval.tracer import Tracer
+
+judgment = Tracer(project_name="meal_planner_assessment")
+
+
 
 # --- Setup Environment and Logging ---
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # --- Helper Functions ---
-
+@judgment.observe(span_type="function")
 def _parse_price(text: str) -> float:
     """
     Extracts a float price from a string (e.g., '$4.99' -> 4.99).
@@ -28,6 +33,7 @@ def _parse_price(text: str) -> float:
         return float(match.group(1))
     return 0.0
 
+@judgment.observe(span_type="function")
 def _extract_item_name(item_with_quantity: str) -> str:
     """
     Removes the quantity/notes in parentheses from a grocery item string.
@@ -61,6 +67,7 @@ web_search_agent = Agent(
 
 # --- Orchestrator Tool ---
 @function_tool
+@judgment.observe(span_type="tool")
 async def orchestrator_tool(user_input: str):
     """
     Coordinates meal planning and pricing logic.
@@ -84,9 +91,13 @@ async def orchestrator_tool(user_input: str):
     for attempt in range(max_retries):
         logging.info(f"--- Attempt {attempt + 1} of {max_retries} ---")
         
+        @judgment.observe(span_type="agent", name="Meal Planner Agent Run")
+        async def run_meal_planner(prompt):
+            return await Runner.run(meal_planner_agent, prompt)
+        
         # Get meal plan from planner agent
         logging.info("🤖 Asking Meal Planner for a new plan...")
-        mealplan_result = await Runner.run(meal_planner_agent, current_prompt)
+        mealplan_result = await run_meal_planner(current_prompt)
         mealplan_text = mealplan_result.final_output
 
         # Parse grocery list from meal planner output
@@ -108,9 +119,14 @@ async def orchestrator_tool(user_input: str):
         logging.info(f"🛒 Found {len(grocery_list_items)} items. Looking up prices...")
 
         # Look up prices asynchronously for all grocery items
+        
         async def get_price(item_text):
+            
+            @judgment.observe(span_type="agent", name="Web Search Agent Run")
+            async def run_web_search(prompt):
+                return await Runner.run(web_search_agent, prompt)
             query_full = f"Price of {item_text} at Walmart in Watertown, Connecticut"
-            result_full = await Runner.run(web_search_agent, query_full)
+            result_full = await run_web_search(query_full)
             price = _parse_price(result_full.final_output)
 
             # Fallback to just the core item name if full search fails
@@ -119,7 +135,7 @@ async def orchestrator_tool(user_input: str):
                 if item_name_only != item_text:
                     logging.info(f"  -> Fallback search for '{item_name_only}'")
                     query_fallback = f"Price of {item_name_only} at Walmart in Watertown, Connecticut"
-                    result_fallback = await Runner.run(web_search_agent, query_fallback)
+                    result_fallback = await run_web_search(query_fallback)
                     price = _parse_price(result_fallback.final_output)
 
             logging.info(f"  - {item_text}: ${price:.2f}")
@@ -156,6 +172,7 @@ async def orchestrator_tool(user_input: str):
             )
 
 # --- CLI (User Interaction Loop) ---
+@judgment.observe(span_type="chain") 
 async def chat_cli():
     """
     CLI: Prompts user for preferences and runs the orchestrator tool to generate the meal plan.
@@ -196,7 +213,11 @@ async def chat_cli():
         model="gpt-4o",
         instructions="You are a master coordinator. Use your tool to fulfill the user's meal planning request, including adhering to their budget and efficiency goals."
     )
-    result = await Runner.run(orchestrator_agent, user_prompt)
+    
+    @judgment.observe(span_type="agent", name="Orchestrator Agent Run")
+    async def run_orchestrator(prompt):
+        return await Runner.run(orchestrator_agent, prompt)
+    result = await run_orchestrator(user_prompt)
     
     print("\n## 📄 Your Meal Plan & Priced Grocery List\n" + result.final_output)
 
