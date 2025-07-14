@@ -1,14 +1,10 @@
 # Efficient Meal & Grocery Planner Agent
 
----
-
 This project features a **multi-agent orchestration system** that coordinates specialized AI agents to automate meal planning and grocery budgeting. The main orchestrator agent manages the overall workflow, delegating tasks to dedicated sub-agents—one focused on generating efficient meal plans and another responsible for fetching real-time grocery prices. This modular agent-based approach makes the system flexible, extensible, and easy to debug or enhance with additional tools and agents in the future.
 
 ## Motivation
 
 Meal planning can be overwhelming, especially when you’re trying to balance nutrition, taste, budget, and pantry leftovers. Most people spend too much time figuring out what to cook, often overspend on groceries, and still waste food. This project uses AI agents to automate meal planning and budget tracking, so you can focus on enjoying your meals, not planning them.
-
----
 
 ## Features
 
@@ -18,8 +14,6 @@ Meal planning can be overwhelming, especially when you’re trying to balance nu
 - **Customizable Preferences:** Supports nutrition goals, dietary restrictions, cultural cuisines, pantry leftovers, and item limits.
 - **Agent-Based & Modular:** Clean, extensible agent/tool design—easy to add features or connect new data sources.
 - **Traceable & Debuggable:** Built-in tracing with [Judgeval](https://github.com/judgeval/judgeval) for seamless debugging and workflow insights.
-
----
 
 ## File Structure
 
@@ -39,8 +33,6 @@ Meal-and-Grocery-Planner-Agent/
 ├── README.md
 └── ...
 ```
-
----
 
 ## Setup
 
@@ -70,8 +62,6 @@ Meal-and-Grocery-Planner-Agent/
    - Fill in your `OPENAI_API_KEY` (get one [here](https://platform.openai.com/account/api-keys)).
    - Add JUDGMENT_API_KEY, JUDGMENT_ORG_ID (create your account [here](https://app.judgmentlabs.ai/register))
 
----
-
 ## Usage
 
 Run the CLI meal planner:
@@ -91,16 +81,12 @@ You’ll be prompted for:
 
 The system will generate a complete meal plan and a priced grocery list, retrying with cheaper options if over budget.
 
----
-
 ## Example Output
 
 ![Sample Output](assets/screenshots/Screenshot01.png)
 ![Sample Output](assets/screenshots/Screenshot02.png)
 ![Sample Output](assets/screenshots/Screenshot03.png)
 ![Sample Output](assets/screenshots/Screenshot04.png)
-
----
 
 ## Tracing & Debugging with Judgeval
 
@@ -114,8 +100,6 @@ This project uses [Judgeval](https://github.com/judgeval/judgeval) for **automat
 
 To view or analyze traces, see the [Judgeval documentation](https://github.com/judgeval/judgeval) for dashboard or export options.
 
----
-
 ## Troubleshooting
 
 - **Missing API Key:**
@@ -126,8 +110,6 @@ To view or analyze traces, see the [Judgeval documentation](https://github.com/j
   Ensure your internet connection is active and you have API quota remaining.
 - **Trace issues:**
   If you don’t see traces, verify the Judgeval integration and check the documentation for advanced setup.
-
----
 
 ## License
 
