@@ -1,5 +1,9 @@
 # Efficient Meal & Grocery Planner Agent
 
+---
+
+This project features a **multi-agent orchestration system** that coordinates specialized AI agents to automate meal planning and grocery budgeting. The main orchestrator agent manages the overall workflow, delegating tasks to dedicated sub-agents—one focused on generating efficient meal plans and another responsible for fetching real-time grocery prices. This modular agent-based approach makes the system flexible, extensible, and easy to debug or enhance with additional tools and agents in the future.
+
 ## Motivation
 
 Meal planning can be overwhelming, especially when you’re trying to balance nutrition, taste, budget, and pantry leftovers. Most people spend too much time figuring out what to cook, often overspend on groceries, and still waste food. This project uses AI agents to automate meal planning and budget tracking, so you can focus on enjoying your meals, not planning them.
